@@ -100,7 +100,7 @@ pipeline {
             }
 
     }
-    stage('Docker Build and Push') {
+    stage('Docker Build and Push to ECR') {
             steps {
                 script {
                     docker.withRegistry("${vprofileRegistry}", "${registryCredential}") {
