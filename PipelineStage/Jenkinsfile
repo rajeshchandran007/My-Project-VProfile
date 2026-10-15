@@ -20,6 +20,9 @@ pipeline {
         registryCredential = 'ecr:ap-south-1:awscreds'
         appRegistry = '015904251830.dkr.ecr.ap-south-1.amazonaws.com/vprofile-app-image'
         vprofileRegistry = 'https://015904251830.dkr.ecr.ap-south-1.amazonaws.com'
+        cluster = 'vproappstaging'
+        service = 'vprofileapptask-service-ut95vlc6'
+
     }
 
     stages {
@@ -98,19 +101,29 @@ pipeline {
                     ]
                 )
             }
-
-    }
-    stage('Docker Build and Push to ECR') {
+        }
+        stage('Docker Build and Push to ECR') {
+                steps {
+                    script {
+                        docker.withRegistry("${vprofileRegistry}", "${registryCredential}") {
+                            def appImage = docker.build("${appRegistry}:${env.BUILD_ID}", "./Docker-files/app/multistage")
+                            appImage.push()
+                            appImage.push('latest')
+                        }
+                    }
+                }
+        }
+        stage('Deploy to ECS') {
             steps {
-                script {
-                    docker.withRegistry("${vprofileRegistry}", "${registryCredential}") {
-                        def appImage = docker.build("${appRegistry}:${env.BUILD_ID}", "./Docker-files/app/multistage")
-                        appImage.push()
-                        appImage.push('latest')
+                withAWS(credentials: 'awscreds', region: 'ap-soth-1') {
+                    script {
+                        sh "aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment"
                     }
                 }
             }
-        }
+        }   
+
+
 }
 
 }
