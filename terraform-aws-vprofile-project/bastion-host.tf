@@ -1,21 +1,19 @@
-data "aws_ami" "Ubuntu22ami" {
+data "aws_ami" "ubuntu_ami" {
   most_recent = true
+  owners      = ["099720109477"] # Canonical
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd*/ubuntu-noble-24.04-amd64-server-*"]
   }
-
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
-
-  owners = ["099720109477"] # Canonical
 }
 
 resource "aws_instance" "vprofile-bastion" {
-  ami                    = data.aws_ami.Ubuntu22ami.id
+  ami                    = data.aws_ami.ubuntu_ami.id
   instance_type          = "t3.micro"
   key_name               = aws_key_pair.vprofilekey.key_name
   subnet_id              = module.vpc.public_subnets[0]

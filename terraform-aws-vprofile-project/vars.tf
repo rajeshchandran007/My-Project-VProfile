@@ -1,5 +1,5 @@
 variable "AWS_REGION" {
-  default = "us-east-1"
+  default = "ap-south-1"
 }
 
 variable "PRIV_KEY_PATH" {
@@ -47,15 +47,15 @@ variable "VPC_NAME" {
 }
 
 variable "Zone1" {
-  default = "us-east-1a"
+  default = "ap-south-1a"
 }
 
 variable "Zone2" {
-  default = "us-east-1b"
+  default = "ap-south-1b"
 }
 
 variable "Zone3" {
-  default = "us-east-1c"
+  default = "ap-south-1c"
 }
 
 variable "VpcCIDR" {
