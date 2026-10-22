@@ -17,17 +17,18 @@ resource "aws_elasticache_subnet_group" "vprofile-ecache-subgrp" {
 }
 
 resource "aws_db_instance" "vprofile-rds" {
+  identifier             = "vprofile-rds-instance"
   allocated_storage      = 20
   storage_type           = "gp3"
   engine                 = "mysql"
-  engine_version         = "8.0.39"
+  engine_version         = "8.4.3"
   instance_class         = "db.t4g.micro"
   db_name                = var.dbname
   username               = var.dbuser
   password               = var.dbpass
-  parameter_group_name   = "default.mysql8.0"
-  multi_az               = "false"
-  publicly_accessible    = "false"
+  parameter_group_name   = "default.mysql8.4"
+  multi_az               = false
+  publicly_accessible    = false
   skip_final_snapshot    = true
   db_subnet_group_name   = aws_db_subnet_group.vprofile-rds-subgrp.name
   vpc_security_group_ids = [aws_security_group.vprofile-backend-sg.id]
@@ -50,6 +51,8 @@ resource "aws_mq_broker" "vprofile-rmq" {
   engine_type                = "RabbitMQ"
   engine_version             = "3.13"
   host_instance_type         = "mq.t3.micro"
+  deployment_mode            = "SINGLE_INSTANCE"
+  publicly_accessible        = false
   auto_minor_version_upgrade = true
   security_groups            = [aws_security_group.vprofile-backend-sg.id]
   subnet_ids                 = [module.vpc.private_subnets[0]]
