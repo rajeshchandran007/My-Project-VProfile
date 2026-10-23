@@ -19,7 +19,7 @@ resource "aws_elasticache_subnet_group" "vprofile-ecache-subgrp" {
 resource "aws_db_instance" "vprofile-rds" {
   identifier             = "vprofile-rds-instance"
   allocated_storage      = 20
-  storage_type           = "gp3"
+  storage_type           = "gp2"
   engine                 = "mysql"
   engine_version         = "8.4"
   instance_class         = "db.t4g.micro"

@@ -42,6 +42,16 @@ variable "instance_count" {
   default = "1"
 }
 
+variable "mq_instance_count" {
+  description = "Number of RabbitMQ instances. Must be at least 1."
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.mq_instance_count >= 1
+    error_message = "At least one RabbitMQ instance is required."
+  }
+ }
+
 variable "VPC_NAME" {
   default = "vprofile-VPC"
 }
