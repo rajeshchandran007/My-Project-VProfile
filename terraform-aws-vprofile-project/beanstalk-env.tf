@@ -2,7 +2,7 @@ resource "aws_elastic_beanstalk_environment" "vprofile-bean-prod" {
   name                = "vprofile-bean-prod"
   application         = aws_elastic_beanstalk_application.vprofile-prod.name
   # Removed the hardcoded version 'v5.14.11' to dynamically fetch the latest available patch
-  solution_stack_name = "64bit Amazon Linux 2023 running Tomcat 10 Corretto 21"
+  solution_stack_name = "64bit Amazon Linux 2023 running Corretto 21 running Tomcat 10"
   cname_prefix        = "vprofile-bean-prod-007"
 
   # Ensure the environment is set up as a load-balanced tier using an ALB
