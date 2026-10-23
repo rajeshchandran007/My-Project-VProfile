@@ -1,4 +1,23 @@
-sudo apt update -y
-sudo apt install git mysql-client -y
+#!/bin/bash
+# 1. Update and install packages cleanly without prompts
+sudo apt-get update -y
+sudo apt-get install git mysql-client -y
+
+# 2. Force the working directory to avoid path mismatches
+cd /home/ubuntu
+
+# Clean up any existing repository folder to prevent "already exists" errors if re-run
+sudo rm -rf vprofile-project
+
+# Clone the repository into /home/ubuntu/vprofile-project
 git clone -b local https://github.com/hkhcoder/vprofile-project.git
-mysql -h ${rds-endpoint} -u ${dbuser} --password=${dbpass} accounts --ssl-mode=DISABLED < /home/ubuntu/vprofile-project/src/main/resources/db_backup.sql
+
+# 3. Ensure the target database exists in RDS
+mysql -h ${rds-endpoint} -u ${dbuser} --password="${dbpass}" --ssl-mode=DISABLED -e "CREATE DATABASE IF NOT EXISTS accounts;"
+
+# 4. Safely import the database schema using absolute paths
+export MYSQL_PWD="${dbpass}"
+mysql -h ${rds-endpoint} -u ${dbuser} --ssl-mode=DISABLED accounts < /home/ubuntu/vprofile-project/src/main/resources/db_backup.sql
+
+# Clean up password token from environment
+unset MYSQL_PWD
