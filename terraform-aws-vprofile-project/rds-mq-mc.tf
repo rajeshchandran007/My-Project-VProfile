@@ -38,7 +38,7 @@ resource "aws_elasticache_cluster" "vprofile-cache" {
   cluster_id           = "vprofile-cache"
   engine               = "memcached"
   node_type            = "cache.t4g.micro"
-  engine_version       = "1.6"
+  engine_version       = "1.6.22"
   num_cache_nodes      = 1
   parameter_group_name = "default.memcached1.6"
   port                 = 11211
